@@ -12,4 +12,4 @@ export class User {
   id: number
 }
 
-export const CatSchema = SchemaFactory.createForClass(User);
+export const UserSchema = SchemaFactory.createForClass(User);

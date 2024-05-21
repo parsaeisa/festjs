@@ -20,4 +20,4 @@ export class Car {
   owner: User;
 }
 
-export const CatSchema = SchemaFactory.createForClass(Car);
+export const CarSchema = SchemaFactory.createForClass(Car);
