@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 import { HydratedDocument } from 'mongoose';
 import { User } from 'src/users/user.schema';
 
-export type CatDocument = HydratedDocument<Car>;
+export type CarDocument = HydratedDocument<Car>;
 
 @Schema()
 export class Car {
