@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
-import { PrismaService } from './../prisma.service';
+import { DbService } from './../db/db.service';
 import { Author, Prisma } from '@prisma/client';
 
 @Injectable()
 export class AuthorService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: DbService) {}
 
   create(data: Prisma.AuthorCreateInput): Promise<Author> {
     return this.prisma.author.create({
