@@ -8,8 +8,6 @@ import { AuthorModule } from './author/author.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/nest'),
-    PostModule,
     DbModule,
     PostModule,
     AuthorModule // TODO: What to put here ???
