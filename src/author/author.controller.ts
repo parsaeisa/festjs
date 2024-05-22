@@ -9,7 +9,7 @@ import { connect } from 'http2';
 export class AuthorController {
   constructor(private readonly authorService: AuthorService) {}
 
-  @Post('post')
+  @Post()
   create(
     @Body() postData: { name: string; email?: string},
   ): Promise<Author> {
