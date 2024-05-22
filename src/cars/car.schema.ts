@@ -16,7 +16,7 @@ export class Car {
   @Prop()
   color: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Owner' })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   owner: User;
 }
 
