@@ -9,22 +9,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Post {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  slug     String    @unique
+  title    String
+  body     String
+  author   User      @relation(fields: [authorId], references: [id])
+  authorId String    @db.ObjectId
+}
+
 model User {
-  
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  email   String   @unique
+  name    String?
+  posts   Post[]
 }
-
-model Car {
-  mode String
-  year Int
-  color String
-  owner @relation()
-}
-
 generator client {
   provider = "prisma-client-js"
-}
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
