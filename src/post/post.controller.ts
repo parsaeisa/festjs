@@ -9,7 +9,7 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Post()
-  create(
+  async createPost(
     @Body() postData: { id?: string
       slug: string,
       title: string,
@@ -30,22 +30,34 @@ export class PostController {
   }
 
   @Get()
-  findAll() {
+  async getAllPosts() {
     return this.postService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postService.findOne(+id);
+  @Get(':searchString')
+  async getFilteredPosts(
+    @Param('searchString') searchString: string,
+  ): Promise<PostEntity[]> {
+    return this.postService.findFiltered({      
+        OR: [
+          {
+            title: { contains: searchString },
+          },
+          {
+            body: { contains: searchString },
+          },
+        ],
+      }
+    );
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+  async updatePost(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     return this.postService.update(+id, updatePostDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async removePost(@Param('id') id: string) {
     return this.postService.remove(+id);
   }
 }

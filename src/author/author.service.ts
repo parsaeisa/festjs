@@ -18,8 +18,12 @@ export class AuthorService {
     return this.prisma.author.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} author`;
+  findOne(id: string) {
+    return this.prisma.author.findFirst({
+      where: {
+        id: {equals: id}
+      }
+    });
   }
 
   update(id: number, updateAuthorDto: UpdateAuthorDto) {

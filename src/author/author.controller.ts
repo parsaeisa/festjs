@@ -10,7 +10,7 @@ export class AuthorController {
   constructor(private readonly authorService: AuthorService) {}
 
   @Post()
-  create(
+  async createAuthor(
     @Body() postData: { name: string; email?: string},
   ): Promise<Author> {
     const { name, email} = postData;
@@ -22,22 +22,22 @@ export class AuthorController {
   }
 
   @Get()
-  findAll() {
+  async getAllAuthors() {
     return this.authorService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authorService.findOne(+id);
+  async getFilteredAuthor(@Param('id') id: string) {
+    return this.authorService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthorDto: UpdateAuthorDto) {
+  async updateAuthor(@Param('id') id: string, @Body() updateAuthorDto: UpdateAuthorDto) {
     return this.authorService.update(+id, updateAuthorDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async removeAuthor(@Param('id') id: string) {
     return this.authorService.remove(+id);
   }
 }

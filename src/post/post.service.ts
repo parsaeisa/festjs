@@ -8,25 +8,27 @@ import { DbService } from 'src/db/db.service';
 export class PostService {
   constructor(private prisma: DbService) {}
 
-  create(data: Prisma.PostCreateInput): Promise<Post> {
+  async create(data: Prisma.PostCreateInput): Promise<Post> {
     return this.prisma.post.create({
       data,
     });
   }
 
-  findAll() {
-    return `This action returns all post`;
+  async findAll() {
+    return this.prisma.post.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  async findFiltered(where: Prisma.PostWhereInput) {
+    return this.prisma.post.findMany({
+      where
+    })
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
+  async update(id: number, updatePostDto: UpdatePostDto) {
     return `This action updates a #${id} post`;
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return `This action removes a #${id} post`;
   }
 }
