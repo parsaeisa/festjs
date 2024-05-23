@@ -22,6 +22,9 @@ export class AuthorService {
     return this.prisma.author.findFirst({
       where: {
         id: {equals: id}
+      },
+      include: {
+        posts: true
       }
     });
   }
