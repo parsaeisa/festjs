@@ -58,6 +58,6 @@ export class PostController {
 
   @Delete(':id')
   async removePost(@Param('id') id: string) {
-    return this.postService.remove(+id);
+    return this.postService.remove(id);
   }
 }
