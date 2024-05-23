@@ -33,11 +33,11 @@ export class AuthorController {
 
   @Patch(':id')
   async updateAuthor(@Param('id') id: string, @Body() updateAuthorDto: UpdateAuthorDto) {
-    return this.authorService.update(+id, updateAuthorDto);
+    return this.authorService.update(id, updateAuthorDto);
   }
 
   @Delete(':id')
   async removeAuthor(@Param('id') id: string) {
-    return this.authorService.remove(+id);
+    return this.authorService.delete(id);
   }
 }
