@@ -2,33 +2,62 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { Post as PostEntity } from '@prisma/client';
 
 @Controller('post')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postService.create(createPostDto);
+  async createPost(
+    @Body() postData: { id?: string
+      slug: string,
+      title: string,
+      body: string,
+      authorId: string
+    },
+  ): Promise<PostEntity> {
+    const { slug, title, body, authorId } = postData;
+
+    return this.postService.create({
+      slug,
+      title,
+      body, 
+      author: {
+        connect : {id: authorId},
+      }     
+    });
   }
 
   @Get()
-  findAll() {
+  async getAllPosts() {
     return this.postService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postService.findOne(+id);
+  @Get(':searchString')
+  async getFilteredPosts(
+    @Param('searchString') searchString: string,
+  ): Promise<PostEntity[]> {
+    return this.postService.findFiltered({      
+        OR: [
+          {
+            title: { contains: searchString },
+          },
+          {
+            body: { contains: searchString },
+          },
+        ],
+      }
+    );
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postService.update(+id, updatePostDto);
+  async updatePost(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+    return this.postService.update(id, updatePostDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postService.remove(+id);
+  async removePost(@Param('id') id: string) {
+    return this.postService.delete(id);
   }
 }

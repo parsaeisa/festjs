@@ -18,15 +18,31 @@ export class AuthorService {
     return this.prisma.author.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} author`;
+  findOne(id: string) {
+    return this.prisma.author.findFirst({
+      where: {
+        id: {equals: id}
+      },
+      include: {
+        posts: true
+      }
+    });
   }
 
-  update(id: number, updateAuthorDto: UpdateAuthorDto) {
-    return `This action updates a #${id} author`;
+  async update(id: string, data: Prisma.AuthorUpdateInput) {
+    return this.prisma.author.update({
+      data,
+      where: {
+        id: id,
+      }
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} author`;
+  async delete(id: string) {
+    return this.prisma.author.delete({
+      where: {
+        id: id,
+      }
+    });
   }
 }
