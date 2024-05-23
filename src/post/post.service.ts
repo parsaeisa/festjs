@@ -18,9 +18,13 @@ export class PostService {
     return this.prisma.post.findMany();
   }
 
-  async findFiltered(where: Prisma.PostWhereInput) {
+  async findFiltered(
+    where?: Prisma.PostWhereInput,
+    orderBy?: Prisma.PostOrderByWithRelationInput,
+  ) {
     return this.prisma.post.findMany({
-      where
+      where: where,
+      orderBy: orderBy
     })
   }
 
@@ -33,7 +37,7 @@ export class PostService {
     });
   }
 
-  async remove(id: string) {
+  async delete(id: string) {
     return this.prisma.post.delete({
       where: {
         id: id,
