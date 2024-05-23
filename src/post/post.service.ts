@@ -24,8 +24,13 @@ export class PostService {
     })
   }
 
-  async update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+  async update(id: string, data: Prisma.PostUpdateInput) {
+    return this.prisma.post.update({
+      data,
+      where: {
+        id: id,
+      }
+    });
   }
 
   async remove(id: number) {
