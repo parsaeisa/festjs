@@ -19,7 +19,7 @@ export class CacheService {
         await this.cacheManager.set(key, value);
     }
 
-    async reseet() {
+    async reset() {
         await this.cacheManager.reset();
     }
 }
