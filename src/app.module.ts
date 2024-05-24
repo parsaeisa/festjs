@@ -5,14 +5,17 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { DbModule } from './db/db.module';
 import { PostModule } from './post/post.module';
 import { AuthorModule } from './author/author.module';
-import { CacheModule } from './cache/cache.module';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
     DbModule,
     PostModule,
     AuthorModule,
-    CacheModule // TODO: What to put here ???
+    CacheModule.register({
+      ttl: 5,
+      max: 10,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
