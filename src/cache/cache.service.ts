@@ -2,18 +2,27 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ConfigService } from '@nestjs/config';
+import { LRUCache } from 'lru-cache';
 
 @Injectable()
 export class CacheService {
-    constructor(
-        @Inject(CACHE_MANAGER) private cacheManager: Cache,
-        private configService: ConfigService
-    ) {}
 
+    private cache: LRUCache<string, any>;
+
+    constructor(
+        private configService: ConfigService
+    ) {
+        this.cache = new LRUCache({ 
+            max: Math.abs(this.configService.get<number>('CACHE_CAPACITY')),
+            ttl: 1000*1000,                        
+        });
+    }
+
+    
     async getRecord(
         key: string 
     ) {
-        let result = await this.cacheManager.get<string>(key);
+        let result = await this.cache.get(key);
         console.log(result)
         return result;
     }
@@ -22,25 +31,23 @@ export class CacheService {
         key: string,
         value: any,
     ) {
-        await this.cacheManager.set(key, value);
+        await this.cache.set(key, value, {
+            ttl: 5*1000
+        });
     }
 
     async reset() {
-        await this.cacheManager.reset();
+        await this.cache.clear();
     }
 
     async getFreeCacheSpace() {
-        const memoryCache = this.cacheManager.store;        
 
-        if ('keys' in memoryCache){
-            console.log("second if clause");
-            const keys = await memoryCache.keys();
-            // console.log(keys)
-            const usedSpace = keys.length;
-            const freeSpace = this.configService.get<number>('CACHE_CAPACITY') - usedSpace;
-            return { usedSpace, freeSpace };
+        let element_counts=0;
+        for (const key of this.cache.keys()) {
+            element_counts += 1;    
+            console.log("Key:", key);
         }
         
-        return null;
+        return this.cache.max - element_counts;
     }
 }

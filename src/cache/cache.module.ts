@@ -4,13 +4,7 @@ import { CacheModule as CM } from '@nestjs/cache-manager';
 import { CacheController } from './cache.controller';
 
 @Module({
-  providers: [CacheService],
-  imports: [
-    CM.register({
-      ttl: 1000*1000,
-      max: 3,
-    }),
-  ],
+  providers: [CacheService],  
   controllers: [CacheController]
 })
 export class CacheModule {}
