@@ -7,14 +7,16 @@ export class CacheService {
     constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
     async getRecord(
-        key: string
+        key: string 
     ) {
-        const value = await this.cacheManager.get(key);
+        let result = await this.cacheManager.get<string>(key);
+        console.log(result)
+        return result;
     }
 
     async setRecord(
         key: string,
-        value: string,
+        value: any,
     ) {
         await this.cacheManager.set(key, value);
     }

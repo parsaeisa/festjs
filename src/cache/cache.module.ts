@@ -7,9 +7,9 @@ import { CacheController } from './cache.controller';
   providers: [CacheService],
   imports: [
     CM.register({
-      ttl: 5,
-      max: 10,
-    })
+      ttl: 1000*1000,
+      max: 3,
+    }),
   ],
   controllers: [CacheController]
 })
