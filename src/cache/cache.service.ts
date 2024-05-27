@@ -1,10 +1,14 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CacheService {
-    constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
+    constructor(
+        @Inject(CACHE_MANAGER) private cacheManager: Cache,
+        private configService: ConfigService
+    ) {}
 
     async getRecord(
         key: string 
@@ -23,5 +27,20 @@ export class CacheService {
 
     async reset() {
         await this.cacheManager.reset();
+    }
+
+    async getFreeCacheSpace() {
+        const memoryCache = this.cacheManager.store;        
+
+        if ('keys' in memoryCache){
+            console.log("second if clause");
+            const keys = await memoryCache.keys();
+            // console.log(keys)
+            const usedSpace = keys.length;
+            const freeSpace = this.configService.get<number>('CACHE_CAPACITY') - usedSpace;
+            return { usedSpace, freeSpace };
+        }
+        
+        return null;
     }
 }
