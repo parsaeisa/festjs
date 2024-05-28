@@ -7,16 +7,23 @@ export class CacheController {
   constructor(private readonly cacheService: CacheService) {}
 
   // Exposed methods
-  @Post(':key')
-  setCache(@Param('key') key: string, @Body() body: any) {
+  @Post(':category/:key')
+  setCache(
+    @Param('key') key: string, 
+    @Param('category') category: string, 
+    @Body() body: any
+  ) {
     console.log(key)
-    this.cacheService.setRecord(key, body);
+    this.cacheService.setRecord(category, key, body);
     return 'Cache set';
   }
 
-  @Get(':key')
-  async getCache(@Param('key') key: string) {
-    return await this.cacheService.getRecord(key);
+  @Get(':category/:key')
+  async getCache(
+    @Param('category') category: string,
+    @Param('key') key: string
+  ) {
+    return await this.cacheService.getRecord(category, key);
   }
 
   @Delete()
@@ -28,10 +35,5 @@ export class CacheController {
   @Get()
   async getFreeCacheSpace() {
     return await this.cacheService.getFreeCacheSpace();
-  }
-
-  // Private method
-  private getCategoryKey(category: string, key: string): string {
-    return `${category}:${key}`;
   }
 }
