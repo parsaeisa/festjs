@@ -20,18 +20,20 @@ export class CacheService {
 
     
     async getRecord(
+        category: string,
         key: string 
     ) {
-        let result = await this.cache.get(key);
-        console.log(result)
-        return result;
+        const storeKey = this.getCategoryKey(category, key)
+        return await this.cache.get(storeKey);
     }
 
     async setRecord(
+        category: string,
         key: string,
         value: any,
     ) {
-        await this.cache.set(key, value, {
+        const storeKey = this.getCategoryKey(category, key)
+        await this.cache.set(storeKey, value, {
             ttl: 5*1000
         });
     }
@@ -49,5 +51,10 @@ export class CacheService {
         }
         
         return this.cache.max - element_counts;
+    }
+
+    // Private method
+    private getCategoryKey(category: string, key: string): string {
+        return `${category}:${key}`;
     }
 }
